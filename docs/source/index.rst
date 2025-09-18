@@ -12,8 +12,8 @@ Harmonics: Hierarchical distribution matching enables comprehensive characteriza
 
    installation
    usage
-   tutorials/Condition-agnostic studies/index
-   tutorials/Case-control studies/index
+   Condition-agnostic studies/index
+   Case-control studies/index
 
 
 Overview

@@ -308,7 +308,7 @@ Cell type enrichment test
   - `enrichment`: bool, whether cell type is significantly enriched  
 
 
-  Cell-cell interaction enrichment test
+Cell-cell interaction enrichment test
 -------------------------------------------
 
 .. code-block:: python
