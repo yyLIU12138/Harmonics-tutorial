@@ -34,6 +34,12 @@ templates_path = ["_templates"]
 html_theme = 'sphinx_rtd_theme'
 nbsphinx_execute = 'never'
 
+html_static_path = ["_static"]
+
+def setup(app):
+    app.add_css_file("custom.css")
+
+
 html_theme_options = dict(navigation_depth=4, logo_only=True)  # Only show the logo
 html_logo = "Harmonics_LOGO.png"
 

@@ -1,0 +1,5 @@
+.nbsphinx img {
+    width: auto !important;
+    max-width: none !important;
+    height: auto !important;
+}
