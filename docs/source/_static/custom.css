@@ -1,5 +1,3 @@
-.nbsphinx img {
-    width: auto !important;
-    max-width: none !important;
-    height: auto !important;
+.wy-nav-content {
+    max-width: 1440px !important;
 }
