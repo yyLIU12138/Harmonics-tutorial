@@ -32,6 +32,7 @@ templates_path = ["_templates"]
 # -- Options for HTML output
 
 html_theme = 'sphinx_rtd_theme'
+nbsphinx_execute = 'never'
 
 html_theme_options = dict(navigation_depth=4, logo_only=True)  # Only show the logo
 html_logo = "INSTINCT_LOGO.png"
