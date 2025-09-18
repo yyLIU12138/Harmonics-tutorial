@@ -305,7 +305,7 @@ Cell type enrichment test
   - `q-value`: FDR-corrected p-value  
   - `log2fc`: log2 fold-change  
   - `prop`: proportion of cell type in niche  
-  - `enrichment`: bool, whether cell type is significantly enriched.    
+  - `enrichment`: bool, whether cell type is significantly enriched.
 
 
 Cell-cell interaction enrichment test
