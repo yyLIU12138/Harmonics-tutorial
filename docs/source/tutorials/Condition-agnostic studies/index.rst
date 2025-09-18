@@ -1,5 +1,5 @@
 ==================================
-Case-control studies
+Condition-agnostic studies
 ==================================
 
 .. toctree::
