@@ -74,15 +74,15 @@ Construct cell representations
 
 - **method**: Default: `'joint'`. string or `None`, method for graph construction. Options:  
 
-  - `'joint'`: n-step hop Delaunay triangulation with graph completion to at least `n_neighbors` per cell.  
+  - ``'joint'``: n-step hop Delaunay triangulation with graph completion to at least `n_neighbors` per cell.  
 
-  - `'delaunay'`: n-step hop Delaunay triangulation.  
+  - ``'delaunay'``: n-step hop Delaunay triangulation.  
 
-  - `'knn'`: connect `n_neighbors` neighbors per cell.  
+  - ``'knn'``: connect `n_neighbors` neighbors per cell.  
 
-  - `'radius'`: connect all cells within a specified radius. If `radius='auto'`, the radius is set to the median distance to the `n_neighbors`-th nearest neighbor across cells.  
+  - ``'radius'``: connect all cells within a specified radius. If `radius='auto'`, the radius is set to the median distance to the `n_neighbors`-th nearest neighbor across cells.  
 
-  - `None`: directly use cell type composition (for low-resolution data).  
+  - ``None``: directly use cell type composition (for low-resolution data).  
 
 - **n_step**: Default: `3`. int, number of steps for n-step Delaunay triangulation.  
 
@@ -94,9 +94,9 @@ Construct cell representations
 
 - **kernel**: Default: `None`. string or `None`, optional weighting scheme used when computing microenvironment cell type distributions. Options:  
 
-  - `None`: use unweighted averaging over neighboring cells.  
+  - ``None``: use unweighted averaging over neighboring cells.  
 
-  - `'gaussian'`: use an adaptive Gaussian kernel to assign distance-dependent weights to neighbors before averaging.  
+  - ``'gaussian'``: use an adaptive Gaussian kernel to assign distance-dependent weights to neighbors before averaging.  
 
 
 Over-clustering initialization (whole dataset / control group / reference)
@@ -186,11 +186,11 @@ Select the solution
 
 - **metric**: Default: `'jsd_v2'`. string, metric used for solution selection. Supported options are:  
 
-  - `'jsd'`: minimum pairwise Jensen-Shannon divergence between niches.  
+  - ``'jsd'``: minimum pairwise Jensen-Shannon divergence between niches.  
 
-  - `'wjsd'`: weighted minimum pairwise Jensen-Shannon divergence between niches.  
+  - ``'wjsd'``: weighted minimum pairwise Jensen-Shannon divergence between niches.  
 
-  - `'jsd_v2'`: bootstrap-based minimum Jensen-Shannon divergence with confidence intervals.   
+  - ``'jsd_v2'``: bootstrap-based minimum Jensen-Shannon divergence with confidence intervals.   
 
 - **threshold**: Default: `0.1`. float, threshold for selecting solution based on `metric`.  
 
@@ -303,11 +303,11 @@ Select the solution (case group)
 
 - **metric**: Default: `'jsd_v2'`. string, metric used for solution selection. Supported options are:  
 
-  - `'jsd'`: minimum pairwise Jensen-Shannon divergence between niches.  
+  - ``'jsd'``: minimum pairwise Jensen-Shannon divergence between niches.  
 
-  - `'wjsd'`: weighted minimum pairwise Jensen-Shannon divergence between niches.  
+  - ``'wjsd'``: weighted minimum pairwise Jensen-Shannon divergence between niches.  
 
-  - `'jsd_v2'`: bootstrap-based minimum Jensen-Shannon divergence with confidence intervals.   
+  - ``'jsd_v2'``: bootstrap-based minimum Jensen-Shannon divergence with confidence intervals.   
 
 - **threshold**: Default: `0.1`. float, threshold for selecting solution based on `metric`.  
 
@@ -375,11 +375,11 @@ Cell type enrichment test
 
 - **method**: Default: `'fisher'`. string, statistical test method. Options:  
 
-  - `'fisher'`: two-sided Fisher's exact test.  
+  - ``'fisher'``: two-sided Fisher's exact test.  
 
-  - `'fisher_greater'`: one-sided Fisher's exact test (greater).  
+  - ``'fisher_greater'``: one-sided Fisher's exact test (greater).  
 
-  - `'chi2'`: chi-square test.  
+  - ``'chi2'``: chi-square test.  
 
 - **alpha**: Default: `0.05`. float, significance level for multiple testing correction.  
 
@@ -397,25 +397,25 @@ Cell type enrichment test
 
 - **ct_results**: `pandas.DataFrame` containing enrichment results with columns:  
 
-  - `niche_idx`: index of the niche  
+  - ``niche_idx``: index of the niche  
 
-  - `niche`: name of the niche  
+  - ``niche``: name of the niche  
 
-  - `celltype_idx`: index of the cell type  
+  - ``celltype_idx``: index of the cell type  
 
-  - `celltype`: name of the cell type  
+  - ``celltype``: name of the cell type  
 
-  - `oddsratio` or `chi2_stat`: test statistic  
+  - ``oddsratio`` or ``chi2_stat``: test statistic  
 
-  - `p-value`: raw p-value  
+  - ``p-value``: raw p-value  
 
-  - `q-value`: FDR-corrected p-value  
+  - ``q-value``: FDR-corrected p-value  
 
-  - `log2fc`: log2 fold-change  
+  - ``log2fc``: log2 fold-change  
 
-  - `prop`: proportion of cell type in niche  
+  - ``prop``: proportion of cell type in niche  
 
-  - `enrichment`: bool, whether cell type is significantly enriched.
+  - ``enrichment``: bool, whether cell type is significantly enriched.
 
 
 Cell-cell interaction enrichment test
@@ -455,9 +455,9 @@ Cell-cell interaction enrichment test
 
 - **method**: Default: `'fisher'`. string, statistical test method. Options:  
 
-  - `'fisher'`: two-sided Fisher's exact test.  
+  - ``'fisher'``: two-sided Fisher's exact test.  
 
-  - `'fisher_greater'`: one-sided Fisher's exact test (greater).  
+  - ``'fisher_greater'``: one-sided Fisher's exact test (greater).  
 
 - **alpha**: Default: `0.05`. float, significance level for multiple testing correction.  
 
@@ -475,27 +475,27 @@ Cell-cell interaction enrichment test
 
 - **cci_results**: `pandas.DataFrame` containing CCI enrichment results with columns:  
 
-  - `niche_idx`: index of the niche  
+  - ``niche_idx``: index of the niche  
 
-  - `niche`: name of the niche  
+  - ``niche``: name of the niche  
 
-  - `ct1_idx`, `ct2_idx`: indices of interacting cell types  
+  - ``ct1_idx``, ``ct2_idx``: indices of interacting cell types  
 
-  - `ct1`, `ct2`: names of interacting cell types  
+  - ``ct1``, ``ct2``: names of interacting cell types  
 
-  - `test_edge_count`, `bg_edge_count`: number of observed and background edges  
+  - ``test_edge_count``, ``bg_edge_count``: number of observed and background edges  
 
-  - `test_edge_prop`, `bg_edge_prop`: proportion of observed and background edges  
+  - ``test_edge_prop``, ``bg_edge_prop``: proportion of observed and background edges  
 
-  - `oddsratio`: odds ratio from statistical test  
+  - ``oddsratio``: odds ratio from statistical test  
 
-  - `p-value`: raw p-value  
+  - ``p-value``: raw p-value  
 
-  - `q-value`: FDR-corrected p-value  
+  - ``q-value``: FDR-corrected p-value  
 
-  - `log2fc`: log2 fold-change  
+  - ``log2fc``: log2 fold-change  
 
-  - `enrichment`: bool, whether interaction is significantly enriched  
+  - ``enrichment``: bool, whether interaction is significantly enriched  
 
 - **test_norm_list**: list of normalized test adjacency matrices for each niche.  
 
@@ -540,11 +540,11 @@ Niche-niche colocalization enrichment test
 
 - **method**: Default: `'fisher'`. string, statistical test method. Options:  
 
-  - `'fisher'`: two-sided Fisher's exact test.  
+  - ``'fisher'``: two-sided Fisher's exact test.  
 
-  - `'fisher_greater'`: one-sided Fisher's exact test (greater).  
+  - ``'fisher_greater'``: one-sided Fisher's exact test (greater).  
 
-  - `'chi2'`: chi-square test with continuity correction.  
+  - ``'chi2'``: chi-square test with continuity correction.  
 
 - **alpha**: Default: `0.05`. float, significance level for multiple testing correction.  
 
@@ -562,23 +562,23 @@ Niche-niche colocalization enrichment test
 
 - **df_results**: `pandas.DataFrame` containing NNC enrichment results with columns:  
 
-  - `niche1_idx`, `niche2_idx`: indices of interacting niches. Niche 1 is source niche and niche 2 is target niche.  
+  - ``niche1_idx``, ``niche2_idx``: indices of interacting niches. Niche 1 is source niche and niche 2 is target niche.  
 
-  - `niche1`, `niche2`: names of interacting niches. Niche 1 is source niche and niche 2 is target niche.  
+  - ``niche1``, ``niche2``: names of interacting niches. Niche 1 is source niche and niche 2 is target niche.  
 
-  - `edge_count`: number of edges observed between niche pairs  
+  - ``edge_count``: number of edges observed between niche pairs  
 
-  - `edge_prop`: proportion of edges between niche pairs for the source niche
+  - ``edge_prop``: proportion of edges between niche pairs for the source niche
 
-  - `oddsratio` or `chi2_stat`: statistic from the test  
+  - ``oddsratio`` or ``chi2_stat``: statistic from the test  
 
-  - `p-value`: raw p-value  
+  - ``p-value``: raw p-value  
 
-  - `q-value`: FDR-corrected p-value  
+  - ``q-value``: FDR-corrected p-value  
 
-  - `log2fc`: log2 fold-change  
+  - ``log2fc``: log2 fold-change  
 
-  - `enrichment`: bool, whether the interaction is significantly enriched  
+  - ``enrichment``: bool, whether the interaction is significantly enriched  
 
 - **edge_prop_mtx**: numpy array, normalized edge proportions between all niche pairs.  
 
@@ -652,11 +652,11 @@ Niche-niche colocalization patterns differential test between groups
 
 - **alternative**: Default: `'two-sided'`. string, alternative hypothesis for the Mann-Whitney U test. Options typically include:  
 
-  - `'two-sided'`: tests whether the two groups differ.  
+  - ``'two-sided'``: tests whether the two groups differ.  
 
-  - `'greater'`: tests whether values in group 1 tend to be greater than those in group 2.  
+  - ``'greater'``: tests whether values in group 1 tend to be greater than those in group 2.  
 
-  - `'less'`: tests whether values in group 1 tend to be less than those in group 2.  
+  - ``'less'``: tests whether values in group 1 tend to be less than those in group 2.  
 
 - **fdr_method**: Default: `'fdr_by'`. string, method for false discovery rate correction.  
 
@@ -664,22 +664,22 @@ Niche-niche colocalization patterns differential test between groups
 
 - **df_nnc_between_groups**: `pandas.DataFrame` containing niche-niche colocalization comparison results with columns:  
 
-  - `niche1`: source niche  
+  - ``niche1``: source niche  
 
-  - `niche2`: target niche  
+  - ``niche2``: target niche  
 
-  - `mean1`: mean colocalization value in group 1  
+  - ``mean1``: mean colocalization value in group 1  
 
-  - `mean2`: mean colocalization value in group 2  
+  - ``mean2``: mean colocalization value in group 2  
 
-  - `delta_mean`: difference in mean colocalization value between group 1 and group 2  
+  - ``delta_mean``: difference in mean colocalization value between group 1 and group 2  
 
-  - `n1_valid`: number of valid samples in group 1  
+  - ``n1_valid``: number of valid samples in group 1  
 
-  - `n2_valid`: number of valid samples in group 2  
+  - ``n2_valid``: number of valid samples in group 2  
 
-  - `p_value`: raw p-value from the Mann-Whitney U test  
+  - ``p_value``: raw p-value from the Mann-Whitney U test  
 
-  - `q_value`: FDR-corrected p-value  
+  - ``q_value``: FDR-corrected p-value  
 
-  - `rejected`: bool, whether the comparison is significant after multiple testing correction.  
+  - ``rejected``: bool, whether the comparison is significant after multiple testing correction.  
