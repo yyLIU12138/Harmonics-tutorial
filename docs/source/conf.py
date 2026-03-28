@@ -6,8 +6,8 @@ project = "Harmonics"
 copyright = "2025, Yuyao Liu"
 author = "Yuyao Liu"
 
-release = "0.0.4"
-version = "0.0.4"
+release = "1.0.3"
+version = "1.0.3"
 
 # -- General configuration
 
