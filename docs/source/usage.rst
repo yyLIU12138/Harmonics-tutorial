@@ -22,7 +22,7 @@ Initialize the model
         concat_label='slice_name',
         proportion_label=None,
         refine_k=0,
-        seed=1234,
+        seed=1234, 
         parallel=True,
         verbose=True,
     )
@@ -50,9 +50,11 @@ Construct cell representations
         ct_key='celltype',
         spatial_key='spatial',
         method='joint',
-        n_step=3,
+        n_step=3, 
         n_neighbors=20,
+        radius='auto',
         cut_percentage=99,
+        kernel=None,
     )
 
 **Parameters**
@@ -63,10 +65,15 @@ Construct cell representations
   - `'joint'`: n-step hop Delaunay triangulation with graph completion to at least `n_neighbors` per cell.  
   - `'delaunay'`: n-step hop Delaunay triangulation.  
   - `'knn'`: connect `n_neighbors` neighbors per cell.  
+  - `'radius'`: connect all cells within a specified radius. If `radius='auto'`, the radius is set to the median distance to the `n_neighbors`-th nearest neighbor across cells.  
   - `None`: directly use cell type composition (for low-resolution data).  
 - **n_step**: Default: `3`. int, number of steps for n-step Delaunay triangulation.  
 - **n_neighbors**: Default: `20`. int, minimum number of neighbors per cell when method is `'joint'` or `'knn'`.  
+- **radius**: Default: `'auto'`. float or `'auto'`, radius used when `method='radius'`. If set to `'auto'`, the radius is automatically determined as the median distance to the `n_neighbors`-th nearest neighbor.  
 - **cut_percentage**: Default: `99`. int, percentage of shortest edges to keep in the Delaunay triangulation adjacency graph. 
+- **kernel**: Default: `None`. string or `None`, optional weighting scheme used when computing microenvironment cell type distributions. Options:  
+  - `None`: use unweighted averaging over neighboring cells.  
+  - `'gaussian'`: use an adaptive Gaussian kernel to assign distance-dependent weights to neighbors before averaging.  
 
 
 Over-clustering initialization (whole dataset / control group / reference)
@@ -126,7 +133,7 @@ Select the solution
         n_niche=None,
         niche_key='niche_label',
         auto=True,
-        metric='jsd',
+        metric='jsd_v2',
         threshold=0.1,
         return_adata=True,
         plot=True,
@@ -141,7 +148,10 @@ Select the solution
 - **n_niche**: Default: `None`. int or `None`, number of niches to select. If `None`, solution is selected automatically using `metric`.  
 - **niche_key**: Default: `'niche_label'`. string, key in `.obs` to store niche assignment results.  
 - **auto**: Default: `True`. bool, whether to automatically determine the solution if `n_niche=None`.  
-- **metric**: Default: `'jsd'`. string, metric used for evaluating solutions, e.g., minimum JSD score.  
+- **metric**: Default: `'jsd_v2'`. string, metric used for solution selection. Supported options are:  
+  - `'jsd'`: minimum pairwise Jensen-Shannon divergence between niches.  
+  - `'wjsd'`: weighted minimum pairwise Jensen-Shannon divergence between niches.  
+  - `'jsd_v2'`: bootstrap-based minimum Jensen-Shannon divergence with confidence intervals.   
 - **threshold**: Default: `0.1`. float, threshold for selecting solution based on `metric`.  
 - **return_adata**: Default: `True`. bool, whether to return an `anndata` object with niche assignments.  
 - **plot**: Default: `True`. bool, whether to plot the minJSD curve.  
@@ -213,7 +223,7 @@ Select the solution (case group)
         niche_key='niche_label',
         csn_key='csn_label',
         auto=True,
-        metric='jsd',
+        metric='jsd_v2',
         threshold=0.1,
         return_adata=True,
         plot=True,
@@ -229,7 +239,10 @@ Select the solution (case group)
 - **niche_key**: Default: `'niche_label'`. string, key in `.obs` to store niche assignment results.  
 - **csn_key**: Default: `'csn_label'`. string, key in `.obs` to store CSN assignment results.  
 - **auto**: Default: `True`. bool, whether to automatically determine the solution if `n_csn=None`.  
-- **metric**: Default: `'jsd'`. string, metric used for evaluating solutions, e.g., minimum JSD score.  
+- **metric**: Default: `'jsd_v2'`. string, metric used for solution selection. Supported options are:  
+  - `'jsd'`: minimum pairwise Jensen-Shannon divergence between niches.  
+  - `'wjsd'`: weighted minimum pairwise Jensen-Shannon divergence between niches.  
+  - `'jsd_v2'`: bootstrap-based minimum Jensen-Shannon divergence with confidence intervals.   
 - **threshold**: Default: `0.1`. float, threshold for selecting solution based on `metric`.  
 - **return_adata**: Default: `True`. bool, whether to return an `anndata` object with CSN assignments.  
 - **plot**: Default: `True`. bool, whether to plot the minJSD curve.  
@@ -419,3 +432,77 @@ Niche-niche colocalization enrichment test
   - `enrichment`: bool, whether the interaction is significantly enriched  
 - **edge_prop_mtx**: numpy array, normalized edge proportions between all niche pairs.  
 - **n1_count**: numpy array, total outgoing edges for each niche.  
+
+
+Niche-niche colocalization matrix
+--------------------------------
+
+.. code-block:: python
+
+    edge_prop_mtx, n1_count = cal_nnc_mtx(
+        adata,
+        niche_key,
+        niche_summary=None,
+        adj_mtx_key=None,
+        spatial_key=None,
+        cut_percentage=99,
+        reserve_nonexist=False,
+    )
+
+**Parameters**
+
+- **adata**: `anndata` object, input dataset used to compute the niche-niche colocalization matrix.  
+- **niche_key**: string, key in `.obs` representing niche labels.  
+- **niche_summary**: Default: `None`. list of niche names or labels. If `None`, all unique niche labels in `adata.obs[niche_key]` are used.  
+- **adj_mtx_key**: Default: `None`. string or `None`, key in `.obsp` storing a precomputed adjacency matrix. If provided, this adjacency matrix is used directly.  
+- **spatial_key**: Default: `None`. string or `None`, key in `.obsm` storing spatial coordinates. If `adj_mtx_key` is `None`, a Delaunay adjacency graph is constructed from these coordinates.  
+- **cut_percentage**: Default: `99`. float, percentage threshold for retaining Delaunay edges when constructing the adjacency graph from spatial coordinates. Only used when `spatial_key` is provided and `adj_mtx_key` is `None`.  
+- **reserve_nonexist**: Default: `False`. bool, whether to retain niches with zero outgoing niche-niche edges by setting their total edge count to 1 before normalization, thereby avoiding division by zero.  
+
+**Returns**
+
+- **edge_prop_mtx**: `numpy.ndarray`, shape `(n_niche, n_niche)`, row-normalized niche-niche colocalization matrix. Each entry represents the proportion of outgoing edges from one niche to another niche, excluding self-niche edges.  
+- **n1_count**: `numpy.ndarray`, shape `(n_niche,)`, total number of outgoing edges from each niche to other niches before normalization.  
+
+
+Niche-niche colocalization patterns differential test between groups
+---------------------------------------------------
+
+.. code-block:: python
+
+    df_nnc_between_groups = nnc_between_groups_test(
+        g1_list,
+        g2_list,
+        niche_labels,
+        min_valid=3,
+        alpha=0.05,
+        alternative="two-sided",
+        fdr_method="fdr_by",
+    )
+
+**Parameters**
+
+- **g1_list**: array-like, shape `(n_sample1, n_niche, n_niche)`, collection of niche-niche colocalization matrices from group 1.  
+- **g2_list**: array-like, shape `(n_sample2, n_niche, n_niche)`, collection of niche-niche colocalization matrices from group 2.  
+- **niche_labels**: list of strings, niche names or labels corresponding to the rows and columns of the colocalization matrices.  
+- **min_valid**: Default: `3`. int, minimum number of valid samples required in each group for testing a niche-niche pair. If either group has fewer than `min_valid` non-NaN values for a given pair, the corresponding test is not performed.  
+- **alpha**: Default: `0.05`. float, significance level for multiple testing correction.  
+- **alternative**: Default: `'two-sided'`. string, alternative hypothesis for the Mann-Whitney U test. Options typically include:  
+  - `'two-sided'`: tests whether the two groups differ.  
+  - `'greater'`: tests whether values in group 1 tend to be greater than those in group 2.  
+  - `'less'`: tests whether values in group 1 tend to be less than those in group 2.  
+- **fdr_method**: Default: `'fdr_by'`. string, method for false discovery rate correction.  
+
+**Returns**
+
+- **df_nnc_between_groups**: `pandas.DataFrame` containing niche-niche colocalization comparison results with columns:  
+  - `niche1`: source niche  
+  - `niche2`: target niche  
+  - `mean1`: mean colocalization value in group 1  
+  - `mean2`: mean colocalization value in group 2  
+  - `delta_mean`: difference in mean colocalization value between group 1 and group 2  
+  - `n1_valid`: number of valid samples in group 1  
+  - `n2_valid`: number of valid samples in group 2  
+  - `p_value`: raw p-value from the Mann-Whitney U test  
+  - `q_value`: FDR-corrected p-value  
+  - `rejected`: bool, whether the comparison is significant after multiple testing correction.  
