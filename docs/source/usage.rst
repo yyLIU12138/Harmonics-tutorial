@@ -53,6 +53,8 @@ Initialize the model
 Construct cell representations
 ------------------------------
 
+Harmonics describes each cell by the cell type composition of its spatial neighborhood, whose size is set by **n_step** for the default Delaunay-based graph and by n_neighbors or radius for the **knn** and **radius** graphs. We have verified experimentally that, at a fixed niche count, the results are robust both to the choice of graph type and to the neighborhood size, as long as the size stays within a reasonable range. What matters is therefore the resulting neighborhood size rather than the particular parameter used to set it. Under the default graph construction strategy, **n_step** of 2, 3, and 4 yields neighborhoods averaging roughly 20, 40, and 70 cells respectively. The default is **n_step**=3. Larger neighborhoods smooth cell niches more strongly, at the cost of resolving thin or small structures, so for highly non-convex spatial architectures we recommend trying **n_step**=2.
+
 .. code-block:: python
 
     model.preprocess(
