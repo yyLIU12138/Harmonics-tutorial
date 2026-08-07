@@ -22,9 +22,11 @@ Initialize the model
         concat_label='slice_name',
         proportion_label=None,
         refine_k=0,
-        seed=1234, 
+        seed=1234,
         parallel=True,
         verbose=True,
+        light_mode=False,
+        block_size=None,
     )
 
 **Parameters**
@@ -47,7 +49,11 @@ Initialize the model
 
 - **parallel**: Default: `True`. bool, whether to run computations in parallel.  
 
-- **verbose**: Default: `True`. bool, whether to print progress messages.  
+- **verbose**: Default: `True`. bool, whether to print progress messages.
+
+- **light_mode**: Default: `False`. bool, whether to skip concatenating and duplicating the expression matrices. Only the spatial coordinates and the cell type labels are used by the model, so setting `True` lowers the memory footprint on large datasets. The returned concatenated object then carries `.obs`, `.obsm['spatial']` and `.uns` but no `.X`.
+
+- **block_size**: Default: `None`. int or `None`, number of cells assigned to niches at a time. If `None`, the whole cell-by-niche matrix is computed at once; setting an integer caps its peak size, which is useful for datasets with a large number of cells.
 
 
 Construct cell representations
@@ -171,6 +177,7 @@ Select the solution
         metric='jsd_v2',
         threshold=0.1,
         return_adata=True,
+        store_all_solutions=False,
         plot=True,
         save=False,
         fig_size=(10, 6),
@@ -196,17 +203,19 @@ Select the solution
 
 - **threshold**: Default: `0.1`. float, threshold for selecting solution based on `metric`.  
 
-- **return_adata**: Default: `True`. bool, whether to return an `anndata` object with niche assignments.  
+- **return_adata**: Default: `True`. bool, whether to return an `anndata` object with niche assignments.
 
-- **plot**: Default: `True`. bool, whether to plot the minJSD curve.  
+- **store_all_solutions**: Default: `False`. bool, whether to additionally store the solutions for all niche counts. The selected solution is always written to `niche_key`; if `True`, the solution for each niche count `Q` is also stored in `.obs['niche_label_{Q}']`, and the available niche counts are recorded in `.uns['niche_count_list']`.
 
-- **save**: Default: `False`. bool, whether to save the minJSD plot.  
+- **plot**: Default: `True`. bool, whether to plot the minJSD curve.
 
-- **fig_size**: Default: `(10, 6)`. tuple, figure size for plotting.  
+- **save**: Default: `False`. bool, whether to save the minJSD plot.
 
-- **save_dir**: Default: `None`. string or `None`, directory to save the plot.  
+- **fig_size**: Default: `(10, 6)`. tuple, figure size for plotting.
 
-- **file_name**: Default: `'score_vs_nichecount_basic.pdf'`. string, name of the saved plot file.  
+- **save_dir**: Default: `None`. string or `None`, directory to save the plot.
+
+- **file_name**: Default: `'score_vs_nichecount_basic.pdf'`. string, name of the saved plot file.
 
 
 Over-clustering initialization (case group)
@@ -286,6 +295,7 @@ Select the solution (case group)
         metric='jsd_v2',
         threshold=0.1,
         return_adata=True,
+        store_all_solutions=False,
         plot=True,
         save=False,
         fig_size=(10, 6),
@@ -313,9 +323,11 @@ Select the solution (case group)
 
 - **threshold**: Default: `0.1`. float, threshold for selecting solution based on `metric`.  
 
-- **return_adata**: Default: `True`. bool, whether to return an `anndata` object with CSN assignments.  
+- **return_adata**: Default: `True`. bool, whether to return an `anndata` object with CSN assignments.
 
-- **plot**: Default: `True`. bool, whether to plot the minJSD curve.  
+- **store_all_solutions**: Default: `False`. bool, whether to additionally store the solutions for all CSN counts. The selected solution is always written to `niche_key` and `csn_key`; if `True`, the solution for each CSN count `R` is also stored in `.obs['niche_label_csn{R}']` and `.obs['csn_label_csn{R}']`, and the available CSN counts are recorded in `.uns['csn_count_list']`.
+
+- **plot**: Default: `True`. bool, whether to plot the minJSD curve.
 
 - **save**: Default: `False`. bool, whether to save the minJSD plot.  
 
