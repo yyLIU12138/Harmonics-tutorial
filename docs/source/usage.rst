@@ -51,9 +51,9 @@ Initialize the model
 
 - **verbose**: Default: `True`. bool, whether to print progress messages.
 
-- **light_mode**: Default: `False`. bool, whether to skip concatenating and duplicating the expression matrices. Only the spatial coordinates and the cell type labels are used by the model, so setting `True` lowers the memory footprint on large datasets. The returned concatenated object then carries `.obs`, `.obsm['spatial']` and `.uns` but no `.X`.
+- **light_mode**: Default: `False`. bool, whether to skip concatenating and duplicating the expression matrices. Only the spatial coordinates and the cell type labels are used by the model, so setting `True` lowers the memory footprint on large datasets. The returned concatenated object then carries `.obs`, `.obsm['spatial']` and `.uns` but no `.X`, and the intermediate cell-by-cell-type matrices are not stored in it either. The input slices keep their `.X`, so expression-level downstream analysis remains available on them. This is most useful for transcriptome-wide data, where the expression matrix dominates the memory footprint.
 
-- **block_size**: Default: `None`. int or `None`, number of cells assigned to niches at a time. If `None`, the whole cell-by-niche matrix is computed at once; setting an integer caps its peak size, which is useful for datasets with a large number of cells.
+- **block_size**: Default: `None`. int or `None`, number of cells processed at a time. If `None`, the intermediate matrices are computed in one pass; setting an integer caps the peak size of the matrices that would otherwise scale with the number of cells, namely the dimensionality reduction during initialization and the cell-by-niche divergence during niche assignment. This is useful for datasets with a large number of cells.
 
 
 Construct cell representations
@@ -180,8 +180,8 @@ Select the solution
         store_all_solutions=False,
         plot=True,
         save=False,
-        fig_size=(10, 6),
-        save_dir=None,
+        fig_size=None,
+        save_dir='./',
         file_name='score_vs_nichecount_basic.pdf',
     )
 
@@ -211,9 +211,9 @@ Select the solution
 
 - **save**: Default: `False`. bool, whether to save the minJSD plot.
 
-- **fig_size**: Default: `(10, 6)`. tuple, figure size for plotting.
+- **fig_size**: Default: `None`. tuple or `None`, figure size for plotting. If `None`, the size is determined automatically from the range of niche counts.
 
-- **save_dir**: Default: `None`. string or `None`, directory to save the plot.
+- **save_dir**: Default: `'./'`. string, directory to save the plot.
 
 - **file_name**: Default: `'score_vs_nichecount_basic.pdf'`. string, name of the saved plot file.
 
@@ -298,8 +298,8 @@ Select the solution (case group)
         store_all_solutions=False,
         plot=True,
         save=False,
-        fig_size=(10, 6),
-        save_dir=None,
+        fig_size=None,
+        save_dir='./',
         file_name='score_vs_nichecount_cond.pdf',
     )
 
@@ -331,9 +331,9 @@ Select the solution (case group)
 
 - **save**: Default: `False`. bool, whether to save the minJSD plot.  
 
-- **fig_size**: Default: `(10, 6)`. tuple, figure size for plotting.  
+- **fig_size**: Default: `None`. tuple or `None`, figure size for plotting. If `None`, the size is determined automatically from the range of CSN counts.
 
-- **save_dir**: Default: `None`. string or `None`, directory to save the plot.  
+- **save_dir**: Default: `'./'`. string, directory to save the plot.
 
 - **file_name**: Default: `'score_vs_nichecount_cond.pdf'`. string, name of the saved plot file.  
 
