@@ -61,6 +61,8 @@ Construct cell representations
 
 Harmonics describes each cell by the cell type composition of its spatial neighborhood, whose size is set by **n_step** for the default Delaunay-based graph and by **n_neighbors** or **radius** for the kNN and radius-based graphs. We have verified experimentally that, at a fixed niche count, the results are robust both to the choice of graph type and to the neighborhood size, as long as the size stays within a reasonable range. What matters is therefore the resulting neighborhood size rather than the particular parameter used to set it. Under the default graph construction strategy, **n_step** of 2, 3, and 4 yields neighborhoods averaging roughly 20, 40, and 70 cells respectively. The default is **n_step** = 3. Larger neighborhoods smooth cell niches more strongly, at the cost of resolving thin or small structures, so for highly non-convex spatial architectures we recommend trying **n_step** = 2.
 
+Because cell representations are built from the spatial neighborhood defined by the graph, the graph itself can influence the results. Its effect is generally mild when the graph reflects the true local tissue structure, but it becomes noticeable when the neighborhood is distorted, for example when edges are removed so heavily that sparse structures lose most of their internal connections. Under such pruning, spatially thin or sparsely populated niches diverge from their true representations and tend to be merged into denser neighboring niches. For tissues where cell density varies strongly across regions, restricting the neighborhood to edges within a moderate radius, rather than pruning edges over the whole graph, can therefore be a safer choice, since it limits cross-region connections without discarding local structure. This option is available by setting ``method='radius'`` in ``model.preprocess()``.
+
 .. code-block:: python
 
     model.preprocess(
@@ -216,6 +218,8 @@ Select the solution
 - **save_dir**: Default: `'./'`. string, directory to save the plot.
 
 - **file_name**: Default: `'score_vs_nichecount_basic.pdf'`. string, name of the saved plot file.
+
+Selecting the number of niches is inherently context-dependent. The automatically recommended solution is a reasonable starting point, but it is not a unique optimum, and the niche number that best captures the structures of interest in a given study may differ from it. We therefore recommend treating the returned solution as a guide and exploring the neighbouring resolutions around it, for example by descending the merge trajectory to compare partitions with the niche counts immediately above and below the recommendation.
 
 
 Over-clustering initialization (case group)
